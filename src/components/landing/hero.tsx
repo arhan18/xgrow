@@ -11,6 +11,11 @@ import { buttonVariants } from "@/components/ui/button";
 import { DemoBadge } from "@/components/ui/demo-badge";
 import { Container } from "@/components/ui/container";
 import { Panel } from "@/components/ui/panel";
+import { analyzeDemoAccount } from "@/lib/demo/analysis";
+import { formatRatio } from "@/lib/format";
+import { topicLabel } from "@/lib/labels";
+
+const leadTopic = analyzeDemoAccount().topTopics[0];
 
 const planRows = [
   {
@@ -39,9 +44,11 @@ function PlanPreview() {
       <div className="mb-4 inline-flex max-w-full items-start gap-2 rounded-lg border border-signal-200 bg-signal-50 px-3 py-2 text-[12px] leading-snug text-signal-800">
         <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
         <span>
-          We learned: your educational posts earn{" "}
-          <span className="font-medium">3.2×</span> the engagement of your
-          promo posts.
+          We learned: {topicLabel(leadTopic.topic)} posts earn{" "}
+          <span className="font-medium">
+            {formatRatio(leadTopic.engagementVsAccount)}
+          </span>{" "}
+          the engagement of your account median.
         </span>
       </div>
 

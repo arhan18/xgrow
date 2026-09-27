@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { GrowthGoalId, NicheId } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, FlaskConical, Plug } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,8 @@ import {
   NICHES,
   TIME_BUDGETS,
 } from "@/lib/demo/account";
+import { DEMO_POSTS } from "@/lib/demo/posts";
+import { completeOnboarding, updateProfile, useProfile } from "@/lib/store/onboarding";
 
 const STEPS = [
   { key: "connect", label: "Connect", title: "Connect your X account" },
@@ -127,10 +130,11 @@ function OptionCard({
 export function OnboardingFlow() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [goalId, setGoalId] = useState<string>(DEMO_ACCOUNT.goalId);
-  const [nicheId, setNicheId] = useState<string>(DEMO_ACCOUNT.nicheId);
-  const [building, setBuilding] = useState(DEMO_ACCOUNT.building);
-  const [minutes, setMinutes] = useState(DEMO_ACCOUNT.dailyMinutes);
+  const profile = useProfile();
+  const goalId = profile.goalId;
+  const nicheId = profile.nicheId;
+  const building = profile.buildingOrSelling;
+  const minutes = profile.timePerDay;
 
   const current = STEPS[step];
 
@@ -140,7 +144,8 @@ export function OnboardingFlow() {
 
   function next() {
     if (step === STEPS.length - 1) {
-      router.push("/app/today");
+      completeOnboarding(profile);
+      router.push("/app/learned");
       return;
     }
     setStep((value) => Math.min(STEPS.length - 1, value + 1));
@@ -168,7 +173,7 @@ export function OnboardingFlow() {
             selected
             onClick={() => undefined}
             title="Continue in Demo Mode"
-            hint={`${DEMO_ACCOUNT.handle} — a realistic sample account with ${DEMO_ACCOUNT.stats.posts} posts of history. Nothing here is a live X account.`}
+            hint={`${DEMO_ACCOUNT.handle} — a realistic sample account with ${DEMO_POSTS.length} posts of history. Nothing here is a live X account.`}
             icon={<FlaskConical className="h-4 w-4" />}
             badge={<Badge variant="demo">Recommended</Badge>}
           />
@@ -193,7 +198,7 @@ export function OnboardingFlow() {
             <OptionCard
               key={goal.id}
               selected={goalId === goal.id}
-              onClick={() => setGoalId(goal.id)}
+              onClick={() => updateProfile({ goalId: goal.id as GrowthGoalId })}
               title={goal.label}
               hint={goal.hint}
             />
@@ -209,7 +214,7 @@ export function OnboardingFlow() {
                 key={niche.id}
                 type="button"
                 aria-pressed={nicheId === niche.id}
-                onClick={() => setNicheId(niche.id)}
+                onClick={() => updateProfile({ nicheId: niche.id as NicheId })}
                 className={cn(
                   "rounded-full border px-3.5 py-1.5 text-[13px] transition-colors",
                   nicheId === niche.id
@@ -236,7 +241,7 @@ export function OnboardingFlow() {
               id="building"
               rows={3}
               value={building}
-              onChange={(event) => setBuilding(event.target.value)}
+              onChange={(event) => updateProfile({ buildingOrSelling: event.target.value })}
               placeholder="e.g. a lightweight feedback tool for indie founders"
               className="mt-3 w-full resize-y rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink placeholder:text-ink-muted focus:border-signal-600 focus:outline-none"
             />
@@ -250,7 +255,7 @@ export function OnboardingFlow() {
             <OptionCard
               key={budget.id}
               selected={minutes === budget.minutes}
-              onClick={() => setMinutes(budget.minutes)}
+              onClick={() => updateProfile({ timePerDay: budget.minutes })}
               title={budget.label}
               hint={budget.hint}
             />

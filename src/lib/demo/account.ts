@@ -5,48 +5,24 @@
  * It is NOT a real connected account and must never be presented as one.
  */
 
+import type { XAccount } from "@/lib/types";
+
 export const DEMO_SOURCE_NOTE =
   "Demo Mode — sample data, not a real connected X account.";
 
-export interface DemoAccount {
-  mode: "demo";
-  handle: string;
-  name: string;
-  initials: string;
-  bio: string;
-  stats: {
-    followers: number;
-    following: number;
-    posts: number;
-  };
-  goalId: GrowthGoalId;
-  nicheId: NicheId;
-  building: string;
-  dailyMinutes: number;
-}
-
-export const DEMO_ACCOUNT: DemoAccount = {
+export const DEMO_ACCOUNT: XAccount = {
+  id: "demo-alexbuilds",
   mode: "demo",
   handle: "@alexbuilds",
   name: "Alex Rivera",
   initials: "AR",
   bio: "Building in public. Shipping small SaaS tools and writing down what actually works — product, distribution, and the occasional strong opinion.",
-  stats: {
-    followers: 4283,
-    following: 612,
-    posts: 1147,
-  },
-  goalId: "audience",
-  nicheId: "indie-hacking",
-  building: "a lightweight feedback tool for indie founders",
-  dailyMinutes: 30,
+  followers: 4283,
+  following: 612,
+  postsCount: 1147,
 };
 
-export type GrowthGoalId =
-  | "audience"
-  | "engagement"
-  | "launch"
-  | "authority";
+export const DEMO_BUILDING = "a lightweight feedback tool for indie founders";
 
 export interface Option {
   id: string;
@@ -77,16 +53,6 @@ export const GROWTH_GOALS: Option[] = [
   },
 ];
 
-export type NicheId =
-  | "indie-hacking"
-  | "saas"
-  | "ai-tools"
-  | "design"
-  | "marketing"
-  | "dev-tools"
-  | "productivity"
-  | "content";
-
 export const NICHES: Option[] = [
   { id: "indie-hacking", label: "Indie hacking", hint: "Building in public" },
   { id: "saas", label: "SaaS", hint: "Products & subscriptions" },
@@ -105,6 +71,10 @@ export const TIME_BUDGETS: (Option & { minutes: number })[] = [
   { id: "60", minutes: 60, label: "60+ min / day", hint: "Full growth session" },
 ];
 
-export function formatCount(value: number): string {
-  return new Intl.NumberFormat("en-US").format(value);
+export function goalLabel(id: string): string {
+  return GROWTH_GOALS.find((goal) => goal.id === id)?.label ?? "—";
+}
+
+export function nicheLabel(id: string): string {
+  return NICHES.find((niche) => niche.id === id)?.label ?? "—";
 }
