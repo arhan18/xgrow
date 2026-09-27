@@ -109,6 +109,49 @@ export interface GrowthInsight {
 }
 
 /* ------------------------------------------------------------------ *
+ * Daily plan
+ * ------------------------------------------------------------------ */
+
+/**
+ * The five actions the TODAY loop can hand out: create, engage, test,
+ * amplify what worked, and avoid what didn't. "stop" never spends time.
+ */
+export type PlanKind =
+  | "post"
+  | "engage"
+  | "experiment"
+  | "double-down"
+  | "stop";
+
+/**
+ * Same traceability contract as GrowthInsight: `evidence` explains how the
+ * action was derived and `supportingPostIds` points at the posts behind it.
+ * `minutes` is filled in by the budget allocator, not by the rule that
+ * proposes the action.
+ */
+export interface PlanItem {
+  id: string;
+  kind: PlanKind;
+  title: string;
+  statement: string;
+  evidence: string;
+  confidence: InsightConfidence;
+  supportingPostIds: string[];
+  /** Slice of the daily time budget this action gets (0 for "stop"). */
+  minutes: number;
+  metric?: { value: string; label: string };
+}
+
+export interface DailyPlan {
+  /** Sorted in play order: post → engage → experiment → double-down → stop. */
+  items: PlanItem[];
+  /** Minutes the user said they have (profile.timePerDay). */
+  timeBudget: number;
+  /** Sum of item minutes — never above timeBudget. */
+  totalMinutes: number;
+}
+
+/* ------------------------------------------------------------------ *
  * Analysis result
  * ------------------------------------------------------------------ */
 

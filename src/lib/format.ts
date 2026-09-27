@@ -47,5 +47,10 @@ export function formatDateRange(from: string, to: string): string {
 }
 
 export function pluralize(count: number, word: string): string {
-  return `${count} ${word}${count === 1 ? "" : "s"}`;
+  const plural = /[^aeiou]y$/.test(word)
+    ? `${word.slice(0, -1)}ies`
+    : /(s|x|z|ch|sh)$/.test(word)
+      ? `${word}es`
+      : `${word}s`;
+  return `${count} ${count === 1 ? word : plural}`;
 }

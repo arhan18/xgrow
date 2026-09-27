@@ -47,3 +47,14 @@ export const WEEKDAY_LABELS = [
   "Fri",
   "Sat",
 ] as const;
+
+/** "Wed" → "Wednesday" for natural-language statements. */
+export const WEEKDAY_FULL: Record<string, string> = {
+  Sun: "Sunday",
+  Mon: "Monday",
+  Tue: "Tuesday",
+  Wed: "Wednesday",
+  Thu: "Thursday",
+  Fri: "Friday",
+  Sat: "Saturday",
+};
