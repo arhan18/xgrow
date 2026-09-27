@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---------------------------------------------------------------
+     Typography
+     --------------------------------------------------------------- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+  --font-display: var(--font-instrument), "Iowan Old Style", Georgia,
+    "Times New Roman", serif;
+
+  /* ---------------------------------------------------------------
+     Surface — warm paper, ink, hairlines
+     --------------------------------------------------------------- */
+  --color-paper: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-sunken: #f4f2ec;
+
+  --color-ink: #101312;
+  --color-ink-soft: #3c4340;
+  --color-ink-muted: #767c78;
+
+  --color-line: #e8e4dc;
+  --color-line-strong: #d8d3c8;
+
+  /* ---------------------------------------------------------------
+     Signal — deep growth green (accents, active, positive)
+     --------------------------------------------------------------- */
+  --color-signal-50: #eff7f2;
+  --color-signal-100: #dcefe4;
+  --color-signal-200: #b7ddc9;
+  --color-signal-300: #88c6a8;
+  --color-signal-400: #52a882;
+  --color-signal-500: #27895e;
+  --color-signal-600: #1a7049;
+  --color-signal-700: #155a3c;
+  --color-signal-800: #114731;
+  --color-signal-900: #0d3627;
+
+  /* ---------------------------------------------------------------
+     Demo Mode + alerts
+     --------------------------------------------------------------- */
+  --color-demo: #fdf7ea;
+  --color-demo-line: #eedfbd;
+  --color-demo-ink: #8a5a11;
+
+  --color-alert: #a33a2e;
+  --color-alert-soft: #fbeeea;
+
+  /* ---------------------------------------------------------------
+     Elevation — restrained
+     --------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgb(16 19 18 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(16 19 18 / 0.04), 0 6px 16px -8px rgb(16 19 18 / 0.12);
+  --shadow-md: 0 2px 4px rgb(16 19 18 / 0.04), 0 18px 40px -18px rgb(16 19 18 / 0.2);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-signal-100);
+    color: var(--color-signal-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal-600);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

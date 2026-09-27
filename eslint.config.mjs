@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // macOS AppleDouble metadata written by the external volume:
+    "._*",
+    "**/._*",
+    "**/.DS_Store",
   ]),
 ]);
 
